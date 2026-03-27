@@ -1,6 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/yriffard/Documents/python_project/a-maze-ing'
-make: Leaving directory '/home/yriffard/Documents/python_project/a-maze-ing'
- 
-make: *** No rule to make target 'l', needed by 'install'.
-
