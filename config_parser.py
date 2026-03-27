@@ -15,12 +15,3 @@ class GetConfig():
             value = x.split("=")[1]
             self.dict_config_info[key] = value
         return (self.dict_config_info)
-
-
-def main() -> None:
-    get_config = GetConfig()
-    print(get_config.get_data_config())
-
-
-if __name__ == "__main__":
-    main()
