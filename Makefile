@@ -2,11 +2,11 @@
 
 
 
-install:
+install: l
 
 run:
 
-debug: 
+debug:  
 
 clean: rm -rf __mypy_cache .mypy_cache
 
