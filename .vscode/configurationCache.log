@@ -1,0 +1,1 @@
+{"buildTargets":["clean","debug","install","lint","lint-strict","run"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
