@@ -13,4 +13,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    get_config = GetConfig()
+    config = get_config.dict_config_info()
+    config_checker(get_config)
     main()

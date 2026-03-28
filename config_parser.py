@@ -6,12 +6,12 @@ class GetConfig():
                 self.get_config_info = f.read()
         except FileNotFoundError as e:
             print("ERROR:", e)
-        self.dict_config_info: dict[str, str] = {}
-        self.info_list = self.get_config_info.split("\n")
 
     def get_data_config(self) -> dict[str, str]:
-        for x in self.info_list:
+        dict_config_info: dict[str, str] = {}
+        info_list = self.get_config_info.split("\n")
+        for x in info_list:
             key = x.split("=")[0]
             value = x.split("=")[1]
-            self.dict_config_info[key] = value
-        return (self.dict_config_info)
+            dict_config_info[key] = value
+        return (dict_config_info)
