@@ -6,6 +6,8 @@ class GetConfig():
                 self.get_config_info = f.read()
         except FileNotFoundError as e:
             print("ERROR:", e)
+        except PermissionError as e:
+            print("ERROR:", e)
 
     def get_data_config(self) -> dict[str, str]:
         dict_config_file: dict[str, str] = {}
