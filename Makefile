@@ -7,6 +7,7 @@ run:
 
 debug:  
 		python3 -m 
+
 clean: 
 		rm -rf __mypy_cache .mypy_cache
 
