@@ -1,3 +1,4 @@
 .mypy_cache
 mlx_CLXV/
 .vscode/
+__pycache__/
