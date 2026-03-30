@@ -16,11 +16,25 @@ class MazeGenerator:
         self.output_file = output_file
         self.perfect = perfect
 
-    def maze_nameofalgogenerator_generator(self) -> None:
-        pass
+    def create_full_maze(self, width, height) -> list[list[str]]:
+        full_maze: list[list[str]] = []
+        for _ in range(height):
+            full_maze.append([])
+        for i in range(height):
+            for _ in range(width):
+                full_maze[i].append("F")
+        return full_maze
+
+    def dfs_maze_generator(self) -> list[list[str]]:
+        maze = self.create_full_maze(self.width, self.height)
+        return maze
 
     def maze_nameofalgosolver_solver(self) -> None:
         pass
 
     def create_output_file(self, file_name) -> None:
         pass
+
+
+maze = MazeGenerator(5, 2, 1, 2, 2, 2, "salut", True)
+print(maze.dfs_maze_generator())
