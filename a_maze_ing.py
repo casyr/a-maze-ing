@@ -21,7 +21,9 @@ class ConfigData(BaseModel):
     @model_validator(mode='after')
     def validation(self) -> Self:
         # add condition where start and end are in the "42"
-
+        if self.ENTRY_X == self.EXIT_X and self.ENTRY_Y == self.EXIT_Y:
+            raise ValueError("Entry and exit exist and are different, "
+                             "inside the maze bounds")
         return self
 
 
@@ -39,7 +41,7 @@ def main() -> None:
     try:
         ConfigData.model_validate(data_dict)
     except ValidationError as e:
-        print(f"Erreur Pydantic :\n{e}")
+        print(f"Erreur Pydantic :\n{e.errors()[0]['msg']}")
 
 
 if __name__ == "__main__":
