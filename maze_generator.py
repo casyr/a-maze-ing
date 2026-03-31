@@ -18,16 +18,15 @@ class MazeGenerator:
         self.perfect = perfect
 
     def select_random_direction(self, x: int, y: int) -> int:
+        direction = {"north": 1, "east": 2, "south": 4, "west": 8}
+        if x == 0:
+            direction.pop("west")
+        if x == self.width - 1:
+            direction.pop("east")
         if y == 0:
-            direction = {"east": 2, "south": 4, "west": 8}
-        elif x == 0:
-            direction = {"north": 1, "east": 2, "south": 4}
-        elif y == self.height:
-            direction = {"north": 1, "east": 2, "west": 8}
-        elif x == self.width:
-            direction = {"north": 1, "south": 4, "west": 8}
-        else:
-            direction = {"north": 1, "east": 2, "south": 4, "west": 8}
+            direction.pop("north")
+        if y == self.height - 1:
+            direction.pop("south")
         return random.choice(list(direction.values()))
 
     def create_full_maze(self, width, height) -> list[list[str]]:
@@ -39,25 +38,24 @@ class MazeGenerator:
                 full_maze[i].append("15")
         return full_maze
 
+    @staticmethod
+    def break_common_wall(direction: int) -> int:
+        if direction == 1:
+            return 4
+        if direction == 2:
+            return 8
+        if direction == 4:
+            return 1
+        if direction == 8:
+            return 2
+        return 0
+
     def dfs_maze_generator(self) -> list[list[str]]:
         pos_x = self.entry_x
         pos_y = self.entry_y
         visited_list: list[tuple] = []
         maze = self.create_full_maze(self.width, self.height)
-        while (len(visited_list) < self.width*self.height):
-            direction = self.select_random_direction(pos_x, pos_y)
-            if ((pos_x, pos_y) not in visited_list or len(visited_list) == 1):
-                new_value = int(maze[pos_x][pos_y]) - direction
-                maze[pos_x][pos_y] = f"{new_value}"
-            visited_list.append((pos_x, pos_y))
-            if direction == 1 and pos_y != 0:
-                pos_y -= 1
-            if direction == 2 and pos_x != self.width:
-                pos_x += 1
-            if direction == 4 and pos_y != self.height:
-                pos_y += 1
-            if direction == 8 and pos_x != 0:
-                pos_x -= 1
+        visited_list.append((pos_x, pos_y))
 
         return maze
 
