@@ -17,18 +17,6 @@ class MazeGenerator:
         self.output_file = output_file
         self.perfect = perfect
 
-    def select_random_direction(self, x: int, y: int) -> int:
-        direction = {"north": 1, "east": 2, "south": 4, "west": 8}
-        if x == 0:
-            direction.pop("west")
-        if x == self.width - 1:
-            direction.pop("east")
-        if y == 0:
-            direction.pop("north")
-        if y == self.height - 1:
-            direction.pop("south")
-        return random.choice(list(direction.values()))
-
     def create_full_maze(self, width, height) -> list[list[str]]:
         full_maze: list[list[str]] = []
         for _ in range(height):
@@ -37,6 +25,20 @@ class MazeGenerator:
             for _ in range(width):
                 full_maze[i].append("15")
         return full_maze
+
+    def select_random_direction(self, x: int, y: int,
+                                visited_list: list[tuple]) -> int:
+        direction = {"north": 1, "east": 2, "south": 4, "west": 8}
+        if x == 0 or (x - 1, y) in visited_list:
+            direction.pop("west")
+        if x == self.width - 1 or (x + 1, y) in visited_list:
+            direction.pop("east")
+        if y == 0 or (x, y - 1) in visited_list:
+            direction.pop("north")
+        if y == self.height - 1 or (x, y + 1) in visited_list:
+            direction.pop("south")
+
+        return random.choice(list(direction.values()))
 
     @staticmethod
     def break_common_wall(direction: int) -> int:
