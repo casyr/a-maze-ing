@@ -97,8 +97,18 @@ class MazeGenerator:
                 actual_path.append((pos_x, pos_y))
         return maze
 
-    def maze_nameofalgosolver_solver(self) -> None:
-        pass
+    def select_smallest_avaible(maze: list[list[int]]) -> tuple:
+        smallest = (0, 0)
+
+        return smallest 
+
+
+    def maze_floodfill_solver(self) -> None:
+        depth = 0
+        pos_x = self.exit_x
+        pos_y = self.exit_y
+        
+        
 
     def create_output_file(self, file_name) -> None:
         pass
