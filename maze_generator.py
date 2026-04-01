@@ -1,4 +1,3 @@
-import sys
 import random
 
 
@@ -60,7 +59,7 @@ class MazeGenerator:
         if direction == 8:
             return 2
         return 0
-    
+
     # ##
     # @staticmethod
     # def print_maze(maze):
