@@ -5,6 +5,7 @@ from config_parser import GetConfig
 from pydantic import BaseModel, Field, ValidationError, model_validator
 from typing import Annotated
 from typing_extensions import Self
+from maze_generator import MazeGenerator
 
 
 class ConfigData(BaseModel):
@@ -24,6 +25,10 @@ class ConfigData(BaseModel):
         if self.ENTRY_X == self.EXIT_X and self.ENTRY_Y == self.EXIT_Y:
             raise ValueError("Entry and exit exist and are different, "
                              "inside the maze bounds")
+        if self.ENTRY_X > self.WIDTH - 1 or self.EXIT_X > self.WIDTH - 1:
+            raise ValueError("ENTRY_X and EXIT_X must be < WIDTH - 1")
+        if self.ENTRY_Y > self.HEIGHT - 1 or self.EXIT_Y > self.HEIGHT - 1:
+            raise ValueError("ENTRY_Y and EXIT_Y must be < WIDTH - 1")
         return self
 
 
@@ -41,7 +46,20 @@ def main() -> None:
     try:
         ConfigData.model_validate(data_dict)
     except ValidationError as e:
-        print(f"Erreur Pydantic :\n{e.errors()[0]['msg']}")
+        print(f"Pydantic Error:\n{e.errors()[0]['msg']}")
+        return
+
+    maze_generator = MazeGenerator(
+        int(data_dict["WIDTH"]),
+        int(data_dict["HEIGHT"]),
+        int(data_dict["ENTRY_X"]),
+        int(data_dict["ENTRY_X"]),
+        int(data_dict["EXIT_X"]),
+        int(data_dict["EXIT_Y"]),
+        data_dict["OUTPUT_FILE"],
+        bool(data_dict["PERFECT"]))
+
+    print(maze_generator.dfs_maze_generator())
 
 
 if __name__ == "__main__":
