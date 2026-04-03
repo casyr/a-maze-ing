@@ -24,6 +24,29 @@ class MazeGenerator:
         self.exit_y = exit_y
         self.output_file = output_file
         self.perfect = perfect
+        mid_width = self.width // 2
+        mid_height = self.height // 2
+        self.forty_two_list: list[tuple] = [
+            (mid_width - 3, mid_height - 2),
+            (mid_width - 3, mid_height - 1),
+            (mid_width - 3, mid_height),
+            (mid_width - 2, mid_height),
+            (mid_width - 1, mid_height),
+            (mid_width - 1, mid_height + 1),
+            (mid_width - 1, mid_height + 2),
+
+            (mid_width + 1, mid_height - 2),
+            (mid_width + 2, mid_height - 2),
+            (mid_width + 3, mid_height - 2),
+            (mid_width + 3, mid_height - 1),
+            (mid_width + 3, mid_height),
+            (mid_width + 2, mid_height),
+            (mid_width + 1, mid_height),
+            (mid_width + 1, mid_height + 1),
+            (mid_width + 1, mid_height + 2),
+            (mid_width + 2, mid_height + 2),
+            (mid_width + 3, mid_height + 2),
+        ]
 
     def create_full_maze(self, width, height) -> list[list[int]]:
         full_maze: list[list[int]] = []
@@ -38,13 +61,17 @@ class MazeGenerator:
         self, x: int, y: int, maze: list[list[int]]
     ) -> int:
         direction = {"north": 1, "east": 2, "south": 4, "west": 8}
-        if x == 0 or maze[y][x - 1] != 15:
+        if (x == 0 or maze[y][x - 1] != 15
+                or (x - 1, y) in self.forty_two_list):
             direction.pop("west")
-        if x == self.width - 1 or maze[y][x + 1] != 15:
+        if (x == self.width - 1 or maze[y][x + 1] != 15
+                or (x + 1, y) in self.forty_two_list):
             direction.pop("east")
-        if y == 0 or maze[y - 1][x] != 15:
+        if (y == 0 or maze[y - 1][x] != 15
+                or (x, y - 1) in self.forty_two_list):
             direction.pop("north")
-        if y == self.height - 1 or maze[y + 1][x] != 15:
+        if (y == self.height - 1 or maze[y + 1][x] != 15
+                or (x, y + 1) in self.forty_two_list):
             direction.pop("south")
         if direction == {}:
             return 0
@@ -62,15 +89,33 @@ class MazeGenerator:
             return 2
         return 0
 
-    # ##
-    # @staticmethod
-    # def print_maze(maze):
-    #     for x in maze:
-    #         for y in x:
-    #             print(f"{y}{"":<4}", end="")
-    #         print("")
-    #     print("\n")
-    # ##
+    ##
+    @staticmethod
+    def print_maze(maze):
+        for x in maze:
+            for y in x:
+                print(f"{y}{"":<4}", end="")
+            print("")
+        print("\n")
+    ##
+
+    def break_dead_end(self, x: int, y: int, maze: list[list[int]]) -> int:
+        direction = {"north": 1, "east": 2, "south": 4, "west": 8}
+        if (x == 0 or maze[y][x] & 8 == 0
+                or (x - 1, y) in self.forty_two_list):
+            direction.pop("west")
+        if (x == self.width - 1 or maze[y][x] & 2 == 0
+                or (x + 1, y) in self.forty_two_list):
+            direction.pop("east")
+        if (y == 0 or maze[y][x] & 1 == 0
+                or (x, y - 1) in self.forty_two_list):
+            direction.pop("north")
+        if (y == self.height - 1 or maze[y][x] & 4 == 0
+                or (x, y + 1) in self.forty_two_list):
+            direction.pop("south")
+        if direction == {}:
+            return 0
+        return random.choice(list(direction.values()))
 
     def dfs_maze_generator(self) -> list[list[int]]:
         pos_x = self.entry_x
@@ -89,6 +134,8 @@ class MazeGenerator:
             elif direction == 8:
                 pos_x -= 1
             elif actual_path != []:
+                if not self.perfect:
+                    self.break_dead_end(pos_x, pos_y, maze)
                 actual_path.pop()
                 if actual_path != []:
                     pos_x, pos_y = actual_path[-1]
@@ -215,11 +262,10 @@ class MazeGenerator:
             return {}
         return min(avaible_list, key=lambda min_depth: min_depth["depth"])
 
+
     def maze_floodfill_solver(self) -> list[dict]:
         maze = self.dfs_maze_generator()
         depth_maze = self.create_depth_maze(maze)
-        print(maze)
-        print(depth_maze)
         pos_x = self.entry_x
         pos_y = self.entry_y
         solve_path: list[dict] = []
@@ -256,3 +302,4 @@ class MazeGenerator:
             output_f.write(f"{self.exit_x}.{self.exit_y}\n")
             for x in solve_path:
                 output_f.write(x["direction"])
+            output_f.write("\n")
