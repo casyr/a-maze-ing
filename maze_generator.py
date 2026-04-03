@@ -262,7 +262,6 @@ class MazeGenerator:
             return {}
         return min(avaible_list, key=lambda min_depth: min_depth["depth"])
 
-
     def maze_floodfill_solver(self) -> list[dict]:
         maze = self.dfs_maze_generator()
         depth_maze = self.create_depth_maze(maze)
