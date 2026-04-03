@@ -10,8 +10,8 @@ from maze_generator import MazeGenerator
 
 class ConfigData(BaseModel):
 
-    WIDTH: Annotated[int, Field(ge=10, le=1980)]
-    HEIGHT: Annotated[int, Field(ge=10, le=1080)]
+    WIDTH: Annotated[int, Field(ge=2, le=1000)]
+    HEIGHT: Annotated[int, Field(ge=2, le=1000)]
     ENTRY_X: Annotated[int, Field(ge=0, le=1500)]
     ENTRY_Y: Annotated[int, Field(ge=0, le=900)]
     EXIT_X: Annotated[int, Field(ge=0, le=1500)]
@@ -59,7 +59,8 @@ def main() -> None:
         data_dict["OUTPUT_FILE"],
         bool(data_dict["PERFECT"]))
 
-    print(maze_generator.dfs_maze_generator())
+    print(maze_generator.maze_floodfill_solver())
+    maze_generator.create_output_file()
 
 
 if __name__ == "__main__":
